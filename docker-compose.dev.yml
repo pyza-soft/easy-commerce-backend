@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  web:
+    # Runs a loop to avoid container termination
+    command: ["sh", "-c", "while [ 0 ]; do date; sleep 30 ; done"]
+    build:
+      args:
+        DEV_ENV: "1"
+    volumes:
+      - ./backend:/usr/local/app/
+  db:
+    volumes:
+      - ./postgres-data:/var/lib/postgresql
