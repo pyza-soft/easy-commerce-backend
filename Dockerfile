@@ -18,10 +18,8 @@ ADD poetry.lock pyproject.toml /
 RUN poetry install
 
 ADD ./backend /usr/local/app/
-WORKDIR /usr/local/app/
 
-ENV STATIC_ROOT /static
-RUN ./manage.py collectstatic --noinput
+WORKDIR /usr/local/app/
 
 EXPOSE 8000
 

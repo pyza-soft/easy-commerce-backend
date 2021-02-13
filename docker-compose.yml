@@ -6,7 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: web
-    env_file: .env
+    env_file:
+      - .env
     depends_on:
       - db
     expose:
