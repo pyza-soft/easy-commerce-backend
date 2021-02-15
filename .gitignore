@@ -130,3 +130,7 @@ dmypy.json
 
 # Temp files
 .postgres-data
+
+# Editor Settings
+.vscode/
+.idea/
