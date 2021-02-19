@@ -12,6 +12,6 @@ Back-End for EasyCommerce Single vendor e-commerce platform
 ### Instructions
 
 - `inv setup-dev` - sets up development environment inside docker
-- `inv runserver` - runs the local server at [https://localhost:8000](https://localhost:8000)
+- `inv runserver` - runs the local server at [http://localhost:8000](http://localhost:8000)
 - `inv shell` - Spawns a shell inside the docker container
 - `inv django-shell` - Spawns a python django REPL
