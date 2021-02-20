@@ -2,7 +2,7 @@ import os
 import time
 from invoke import task
 
-DEFAULT_DOCKER_COMPOSE_FILES = 'docker-compose.override.dev.yml,docker-compose.yml'
+DEFAULT_DOCKER_COMPOSE_FILES = 'docker-compose.dev.yml,docker-compose.yml'
 
 
 def docker_exec(c, command, executor='docker exec', container_name='web', pty=True, envs={}):
