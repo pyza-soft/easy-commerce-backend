@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'graphene_django',
 
     # Apps
     'users',
@@ -80,6 +81,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+
+# GRAPHENE = {
+#     "SCHEMA": "django_root.schema.schema"
+# }
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
