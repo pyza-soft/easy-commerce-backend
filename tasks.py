@@ -55,9 +55,9 @@ def migrate(c):
 
 
 @task
-def create_su(c, username="admin", email="admin@django.com", phone="12341234"):
+def create_su(c, username="admin", email="admin@django.com"):
     docker_exec(
-        c, f"./manage.py createsuperuser --username {username} --email {email} --phone {phone}")
+        c, f"./manage.py createsuperuser --username {username} --email {email}")
 
 
 @task(pre=[build_docker, start_docker, sleep, migrate, create_su])
