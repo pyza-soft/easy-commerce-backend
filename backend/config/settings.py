@@ -53,7 +53,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'config.middlewares.CORSMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -151,3 +150,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/usr/local/staticfiles/'
+
+
+# DEBUG Settings
+if DEBUG:
+    INSTALLED_APPS.append('corsheaders')
+    MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
+    CORS_ALLOW_ALL_ORIGINS = DEBUG
