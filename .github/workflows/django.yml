@@ -13,10 +13,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       name: Check out code
-    - name: Set Docker tag
-      id: vars
-      run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
-    - name: Build Docker image
-      run: docker build . --file Dockerfile --tag easy-commerce-backend:${{steps.vars.outputs.tag}}
-    - name: Run Tests
-      run: docker exec -it web "./manage.py test"
+    # - name: Set Docker tag
+    #   id: vars
+    #   run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
+    - uses: docker/build-push-action@v1
+      with:
+        repository: ec-backend-image
+        push: false
+    - uses: addnab/docker-run-action@v3
+      with:
+        image: ec-backend-image:latest
+        run: python manage.py test
+    # - name: Build Docker image
+    #   run: docker build . --file Dockerfile --tag easy-commerce-backend:${{steps.vars.outputs.tag}}
+    # - name: Run Tests
+    #   run: docker exec -it web ""
