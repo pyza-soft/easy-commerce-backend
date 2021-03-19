@@ -1,0 +1,22 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      name: Check out code
+    - name: Set Docker tag
+      id: vars
+      run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
+    - name: Build Docker image
+      run: docker build . --file Dockerfile --tag easy-commerce-backend:${{steps.vars.outputs.tag}}
+    - name: Run Tests
+      run: docker exec -it web "./manage.py test"
