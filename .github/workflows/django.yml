@@ -41,6 +41,3 @@ jobs:
         push_image_and_stages: false
     - name: Run Django Test
       run: docker run --rm --env-file .env.ci easy-commerce-backend ./manage.py test -v2
-    - name: Docker image list
-      run: docker container ls; docker images
-      
