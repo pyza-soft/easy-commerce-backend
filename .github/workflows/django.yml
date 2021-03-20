@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+
+      postgres:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_DB: easycomm_db
+          POSTGRES_PASSWORD: easycomm_pass
+          POSTGRES_USER: easycomm_user
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: Build Docker Image
+      uses: whoan/docker-build-with-cache-action@v5
+      with:
+        image_name: easy-commerce-backend
+        context: .
+        push_image_and_stages: false
+    - name: Run Django Test
+      run: docker run --rm --env-file .env.ci easy-commerce-backend ./manage.py test -v2
