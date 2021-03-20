@@ -1,4 +1,4 @@
-name: Django CI
+name: CI
 
 on:
   push:
@@ -15,21 +15,41 @@ jobs:
         ports:
           - 5000:5000
 
+      postgres:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_DB: easycomm_db
+          POSTGRES_PASSWORD: easycomm_pass
+          POSTGRES_USER: easycomm_user
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - uses: actions/checkout@v2
       name: Check out code
-    - name: Setup env variables
+    - name: Create .env file
       run: cp .env.sample .env
-    - uses: docker/build-push-action@v2
+    - uses: whoan/docker-build-with-cache-action@v5
       with:
-        context: .
-        push: true
-        tags: localhost:5000/easy-commerce-backend:latest
-    - uses: addnab/docker-run-action@v3
-      with:
-        image: localhost:5000/easy-commerce-backend:latest
-        run: python manage.py test
-    # - name: Build Docker image
-    #   run: docker build . --file Dockerfile --tag easy-commerce-backend:${{steps.vars.outputs.tag}}
-    # - name: Run Tests
-    #   run: docker exec -it web ""
+        compose_file: docker-compose.yml > docker-compose.override.yml
+        push_image_and_stages: false
+    # - uses: docker/build-push-action@v2
+    #   with:
+    #     context: .
+    #     push: true
+    #     tags: localhost:5000/easy-commerce-backend:latest
+    # - uses: addnab/docker-run-action@v3
+    #   with:
+    #     image: localhost:5000/easy-commerce-backend:latest
+    #     run: python manage.py test
+    - name: Docker image list
+      run: docker container ls; docker images
+    - name: List Directory
+      run: ls
+      
