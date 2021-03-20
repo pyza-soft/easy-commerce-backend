@@ -31,25 +31,17 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v2
-      name: Check out code
-    - name: Create .env file
-      run: cp .env.sample .env
-    - uses: whoan/docker-build-with-cache-action@v5
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: Build Docker Image
+      uses: whoan/docker-build-with-cache-action@v5
       with:
+        image_name: easy-commerce-backend
+        context: .
         compose_file: docker-compose.yml
         push_image_and_stages: false
-    # - uses: docker/build-push-action@v2
-    #   with:
-    #     context: .
-    #     push: true
-    #     tags: localhost:5000/easy-commerce-backend:latest
-    # - uses: addnab/docker-run-action@v3
-    #   with:
-    #     image: localhost:5000/easy-commerce-backend:latest
-    #     run: python manage.py test
+    - name: Run Django Test
+      run: docker run --rm --env-file .env.ci easy-commerce-backend ./manage.py test -v2
     - name: Docker image list
       run: docker container ls; docker images
-    - name: List Directory
-      run: ls
       
