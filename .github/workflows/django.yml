@@ -38,7 +38,6 @@ jobs:
       with:
         image_name: easy-commerce-backend
         context: .
-        compose_file: docker-compose.yml
         push_image_and_stages: false
     - name: Run Django Test
       run: docker run --rm --env-file .env.ci easy-commerce-backend ./manage.py test -v2
