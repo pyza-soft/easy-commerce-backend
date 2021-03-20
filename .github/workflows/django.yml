@@ -9,20 +9,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
 
     steps:
     - uses: actions/checkout@v2
       name: Check out code
-    # - name: Set Docker tag
-    #   id: vars
-    #   run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
-    - uses: docker/build-push-action@v1
+    - name: Setup env variables
+      run: cp .env.sample .env
+    - uses: docker/build-push-action@v2
       with:
-        repository: ec-backend-image
-        push: false
+        context: .
+        push: true
+        tags: localhost:5000/easy-commerce-backend:latest
     - uses: addnab/docker-run-action@v3
       with:
-        image: ec-backend-image:latest
+        image: localhost:5000/easy-commerce-backend:latest
         run: python manage.py test
     # - name: Build Docker image
     #   run: docker build . --file Dockerfile --tag easy-commerce-backend:${{steps.vars.outputs.tag}}
