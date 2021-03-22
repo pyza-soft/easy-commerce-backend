@@ -30,11 +30,13 @@ class CreateBrand(graphene.Mutation):
     class Arguments:
         name = graphene.String()
         description = graphene.String()
+        image = graphene.ImageField()
     
     def mutate(self, info, **kwagrs):
         brand = Brand(
             name=kwagrs.get('name'),
             description=kwagrs.get('description'),
+            image=info.context.FILES
         )
         brand.save()
         
@@ -53,6 +55,7 @@ class UpdateBrand(graphene.Mutation):
         brand = Brand.objects.get(id=kwagrs.get('brand_id'))
         brand.name = kwagrs.get('name')
         brand.description = kwagrs.get('description')
+        brand.image = info.context.FILES
         brand.save()
         
         return UpdateBrand(brand=brand)
@@ -72,22 +75,23 @@ class DeleteBrand(graphene.Mutation):
         return DeleteBrand(brand_id=brand_id)
 
 
-# class CreateCategory(graphene.Mutation):
-#     category = graphene.Field(CategoryType)
+class CreateCategory(graphene.Mutation):
+    category = graphene.Field(CategoryType)
     
-#     class Arguments:
-#         name = graphene.String()
-#         description = graphene.String()
-#         image = graphene.ImageField()
+    class Arguments:
+        name = graphene.String()
+        description = graphene.String()
+        image = graphene.ImageField()
     
-#     def mutate(self, info, **kwagrs):
-#         brand = Brand(
-#             name=kwagrs.get('name'),
-#             description=kwagrs.get('description'),
-#         )
-#         brand.save()
+    def mutate(self, info, **kwagrs):
+        brand = Brand(
+            name=kwagrs.get('name'),
+            description=kwagrs.get('description'),
+            image=info.context.FILES,
+        )
+        brand.save()
         
-#         return CreateBrand(brand)
+        return CreateBrand(brand)
 
 
 class Mutation(graphene.ObjectType):
