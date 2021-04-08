@@ -24,6 +24,13 @@ class BrandQuery(graphene.ObjectType):
         return Brand.objects.all()
 
 
+class CategoryQuery(graphene.ObjectType):
+    categories = graphene.List(CategoryType)
+    
+    def resolve_categories(self, info):
+        return Category.objects.all()
+
+
 class CreateBrand(graphene.Mutation):
     brand = graphene.Field(BrandType)
     
@@ -84,17 +91,52 @@ class CreateCategory(graphene.Mutation):
         image = graphene.ImageField()
     
     def mutate(self, info, **kwagrs):
-        brand = Brand(
+        category = Category(
             name=kwagrs.get('name'),
             description=kwagrs.get('description'),
             image=info.context.FILES,
         )
-        brand.save()
+        category.save()
         
-        return CreateBrand(brand)
+        return CreateCategory(category=category)
+
+class UpdateCategory(graphene.Mutation):
+    category = graphene.Field(CategoryType)
+    
+    class Arguments:
+        category_id = graphene.Int()
+        name = graphene.String()
+        description = graphene.String()
+    
+    def mutate(self, info, **kwagrs):
+        category = Category.objects.get(id=kwagrs.get('category_id'))
+        category.name = kwagrs.get('name')
+        category.description = kwagrs.get('description')
+        category.image = info.context.FILES
+        category.save()
+        
+        return UpdateCategory(category=category)
+
+
+class DeleteCategory(graphene.Mutation):
+    category_id = graphene.Int()
+    
+    class Arguments:
+        category_id = graphene.Int(required=True)
+    
+    def mutate(self, info, **kwagrs):
+        category_id = kwagrs.get('category_id')
+        category = Category.objects.get(id=category_id)
+        category.delete()
+        
+        return DeleteCategory(category_id=category_id)
 
 
 class Mutation(graphene.ObjectType):
     create_brand = CreateBrand.Field()
     update_brand = UpdateBrand.Field()
     delete_brand = DeleteBrand.Field()
+    
+    create_category = CreateCategory.Field()
+    update_category = UpdateCategory.Field()
+    delete_category = DeleteCategory.Field()

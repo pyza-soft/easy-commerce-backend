@@ -2,7 +2,7 @@ import graphene
 import graphql_jwt
 import products.schema
 
-class Query(products.schema.BrandQuery, graphene.ObjectType):
+class Query(products.schema.BrandQuery, products.schema.CategoryQuery, graphene.ObjectType):
     title = graphene.String(default_value="Easy Commerce!")
 
 
