@@ -37,7 +37,7 @@ class CreateBrand(graphene.Mutation):
     class Arguments:
         name = graphene.String()
         description = graphene.String()
-        image = graphene.ImageField()
+        image = graphene.String()
     
     def mutate(self, info, **kwagrs):
         brand = Brand(
@@ -57,6 +57,7 @@ class UpdateBrand(graphene.Mutation):
         brand_id = graphene.Int()
         name = graphene.String()
         description = graphene.String()
+        image = graphene.String()
     
     def mutate(self, info, **kwagrs):
         brand = Brand.objects.get(id=kwagrs.get('brand_id'))
@@ -88,7 +89,7 @@ class CreateCategory(graphene.Mutation):
     class Arguments:
         name = graphene.String()
         description = graphene.String()
-        image = graphene.ImageField()
+        image = graphene.String()
     
     def mutate(self, info, **kwagrs):
         category = Category(
@@ -107,6 +108,7 @@ class UpdateCategory(graphene.Mutation):
         category_id = graphene.Int()
         name = graphene.String()
         description = graphene.String()
+        image = graphene.String()
     
     def mutate(self, info, **kwagrs):
         category = Category.objects.get(id=kwagrs.get('category_id'))
