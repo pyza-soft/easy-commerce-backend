@@ -1,11 +1,12 @@
 from django.contrib import admin
-from products.models import (
-    Brand,Category,
-)
+from products.models import Brand, Category
 
-admin.site.register(Brand)
+
+@admin.register(Brand)
+class BrandAdmin(admin.ModelAdmin):
+    list_display = ('name',)
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    raw_id_fields = ['brand',]
+    list_display = ('name',)
