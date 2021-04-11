@@ -150,6 +150,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/usr/local/staticfiles/'
+MEDIA_URL = env.str('MEDIA_URL')
+MEDIA_ROOT = env.str('MEDIA_ROOT')
 
 
 # DEBUG Settings
